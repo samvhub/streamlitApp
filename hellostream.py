@@ -72,9 +72,11 @@ def main():
                     filtered_data = loaded_data[selected_headers]
                     st.write(filtered_data.head())
                 else:
-                    st.warning("Please select at least one header for filtering.")
+                    # Display all data if no headers are selected
+                    st.write(loaded_data)
         else:
             st.warning("Please enter a valid data source.")
 
 if __name__ == "__main__":
     main()
+
