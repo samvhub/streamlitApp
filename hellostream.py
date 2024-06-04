@@ -37,8 +37,7 @@
 #-----------------------------#
 #-----------------------------#
 #-----------------------------#
-import streamlit as st
-import requests
+#-----------------------------#
 import streamlit as st
 import pandas as pd
 
@@ -63,7 +62,17 @@ def main():
             loaded_data = load_data(data_source)
             if loaded_data is not None:
                 st.success("Data loaded successfully!")
-                st.write(loaded_data.head())
+
+                # Display headers for dynamic filtering
+                headers = loaded_data.columns
+                selected_headers = st.multiselect("Select headers for filtering:", headers)
+
+                # Apply dynamic filters
+                if selected_headers:
+                    filtered_data = loaded_data[selected_headers]
+                    st.write(filtered_data.head())
+                else:
+                    st.warning("Please select at least one header for filtering.")
         else:
             st.warning("Please enter a valid data source.")
 
