@@ -34,7 +34,9 @@
 # # Add a slider
 # slider_value = st.slider("Select a value", min_value=0, max_value=10)
 # st.write(f"Selected value: {slider_value}")
-import streamlit as st
+#-----------------------------#
+#-----------------------------#
+#-----------------------------#
 import requests
 
 # Define the API URL
@@ -49,14 +51,5 @@ filters = {
 # Make a GET request to the API
 response = requests.get(url, params=filters)
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Parse the JSON data
-    data = response.json()
-
-    # Display the data in Streamlit
-    st.title("Filtered Data from NYC Dataset")
-    st.write("Displaying 30 rows of data where borough is 'MANHATTAN':")
-    st.table(data)
-else:
-    st.error(f"Error fetching data. Status code: {response.status_code}")
+# Log the status code
+print(f"Status code: {response.status_code}")
