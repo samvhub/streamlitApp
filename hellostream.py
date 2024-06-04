@@ -5,32 +5,58 @@
 # st.write("Hello test!")
 
 
+# import streamlit as st
+
+# # Streamlit app title
+# st.title("Sample Code Presentation")
+
+# # Sample Python code
+# sample_code = """
+# def greet(name):
+#     return f"Hello, {name}!"
+
+# # Example usage
+# user_name = "John"
+# greeting = greet(user_name)
+# print(greeting)
+# """
+
+# # Display the sample code
+# st.code(sample_code, language="python")
+
+# # Add a description
+# st.write("This is a simple Python function that greets a user by name.")
+
+# # Add a button
+# if st.button("Click me!"):
+#     st.write("Button clicked!")
+
+# # Add a slider
+# slider_value = st.slider("Select a value", min_value=0, max_value=10)
+# st.write(f"Selected value: {slider_value}")
 import streamlit as st
+import requests
 
-# Streamlit app title
-st.title("Sample Code Presentation")
+# Define the API URL
+url = "https://data.cityofnewyork.us/resource/kpav-sd4t.json"
 
-# Sample Python code
-sample_code = """
-def greet(name):
-    return f"Hello, {name}!"
+# Define the filter parameters (you can adjust these as needed)
+filters = {
+    "$limit": 30,
+    "$where": "borough = 'MANHATTAN'",
+}
 
-# Example usage
-user_name = "John"
-greeting = greet(user_name)
-print(greeting)
-"""
+# Make a GET request to the API
+response = requests.get(url, params=filters)
 
-# Display the sample code
-st.code(sample_code, language="python")
+# Check if the request was successful
+if response.status_code == 200:
+    # Parse the JSON data
+    data = response.json()
 
-# Add a description
-st.write("This is a simple Python function that greets a user by name.")
-
-# Add a button
-if st.button("Click me!"):
-    st.write("Button clicked!")
-
-# Add a slider
-slider_value = st.slider("Select a value", min_value=0, max_value=10)
-st.write(f"Selected value: {slider_value}")
+    # Display the data in Streamlit
+    st.title("Filtered Data from NYC Dataset")
+    st.write("Displaying 30 rows of data where borough is 'MANHATTAN':")
+    st.table(data)
+else:
+    st.error(f"Error fetching data. Status code: {response.status_code}")
