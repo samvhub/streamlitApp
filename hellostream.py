@@ -37,6 +37,7 @@
 #-----------------------------#
 #-----------------------------#
 #-----------------------------#
+import streamlit as st
 import requests
 
 # Define the API URL
@@ -51,5 +52,15 @@ filters = {
 # Make a GET request to the API
 response = requests.get(url, params=filters)
 
-# Log the status code
-print(f"Status code: {response.status_code}")
+# Check if the request was successful
+if response.status_code == 200:
+    # Parse the JSON data
+    data = response.json()
+
+    # Display the data in Streamlit
+    st.title("Filtered Data from NYC Dataset")
+    st.write("Displaying 30 rows of data where borough is 'MANHATTAN':")
+    st.write(data)
+else:
+    st.error(f"Error fetching data. Status code: {response.status_code}")
+
