@@ -39,28 +39,33 @@
 #-----------------------------#
 import streamlit as st
 import requests
+import streamlit as st
+import pandas as pd
 
-# Define the API URL
-url = "https://data.cityofnewyork.us/resource/kpav-sd4t.json"
+def load_data(data_source):
+    # Load data from the specified data source (e.g., URL or local file)
+    try:
+        data = pd.read_json(data_source)
+        return data
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        return None
 
-# Define the filter parameters (you can adjust these as needed)
-filters = {
-    "$limit": 30,
-    "$where": "borough = 'MANHATTAN'",
-}
+def main():
+    st.title("Data Loader App")
 
-# Make a GET request to the API
-response = requests.get(url, params=filters)
+    # Text input for data source (URL or local file path)
+    data_source = st.text_input("Enter data source (URL or file path):")
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Parse the JSON data
-    data = response.json()
+    # Button to load data
+    if st.button("Load Data"):
+        if data_source:
+            loaded_data = load_data(data_source)
+            if loaded_data is not None:
+                st.success("Data loaded successfully!")
+                st.write(loaded_data.head())
+        else:
+            st.warning("Please enter a valid data source.")
 
-    # Display the data in Streamlit
-    st.title("Filtered Data from NYC Dataset")
-    st.write("Displaying 30 rows of data where borough is 'MANHATTAN':")
-    st.write(data)
-else:
-    st.error(f"Error fetching data. Status code: {response.status_code}")
-
+if __name__ == "__main__":
+    main()
